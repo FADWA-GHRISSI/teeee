@@ -1,1 +1,12 @@
-kfiffi
+ 1=============> git remote add origin https://github.com/FADWA-GHRISSI/teeee.git
+2)  git branch -M main bach tmchi l chi branch
+3) git switch -c new-branch
+4)git add .
+5)git commit -m 'fist coùmùiit'
+6)git branch -a
+7)git push origin ila 3ta probleme d upstream
+8)git push --set-upstream origin new-branch
+9)git add  .
+10) git commit -m 'fkjj'
+11)git push origin
+
