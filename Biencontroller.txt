@@ -1,0 +1,45 @@
+ public function getPrixByBienId(Request $request){
+        //metter le bien choisi en proposition
+        $bien_id=$request->bien_id;
+        $bien=Bien::find($bien_id);
+
+        if($request->prev_id==NULL){
+            $id_biien=$request->bien_id;
+            $bien->proposition=1;
+            $bien->user_id_propose=Auth::user()->id;
+            $bien->date_proposition=Carbon::now();
+            $bien->save();
+        }
+        else{
+            $id_biien=$request->prev_id;
+            $bien_prop=Bien::find($request->prev_id);
+            $bien_prop->proposition=0;
+            $bien->user_id_propose=NULL;
+            $bien->date_proposition=NULL;
+            if($bien_prop->save()){
+                $bien->proposition=1;
+                $bien->user_id_propose=Auth::user()->id;
+                $bien->date_proposition=Carbon::now();
+                $bien->save();
+            }
+        }
+
+        $prix=$bien->prix;
+        $nom_bien=$bien->propriete_dite_bien;
+        $id_bien=$bien->id;
+
+        /*$compromis=Reservation::Join('compromis_ventes', 'reservations.id_compromis_vente_desist', '=', 'compromis_ventes.id')
+        ->where('reservations.bien_id',$request->bien_id)
+        ->where('reservations.desist','!=',0)
+        ->where('reservations.id_compromis_vente_desist','!=',NULL)
+        ->where('reservations.enable',1)
+        ->where('compromis_ventes.date_annulation_par_desistement',NULL)
+        ->where('compromis_ventes.enable',1)
+        ->count();*/
+
+        Session::put('bien_selected', $id_bien);
+        //return response()->json($prix);
+        return response()->json(['prix' => $prix,  'nom_bien' => $nom_bien, 'id_bien' => $id_bien, 'bien_selected' => session('bien_selected')]);
+       // return response() -> json(['prix' => $prix,'compromis' => $compromis,'nom_bien' => $nom_bien,'id_bien' => $id_bien]);
+
+    }
